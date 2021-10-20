@@ -1,7 +1,11 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Image, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, Image, View, FlatList } from 'react-native';
 
 import { SinglePokemonResponse } from '../interfaces/pokemonsInterfaces';
+
+import fontPresets from '../theme/fontPresets';
+
+import elementsPalette from '../data/elementsPalette';
 
 import { formatIndexNumber, formatName } from '../helpers/textFormatters';
 
@@ -10,12 +14,7 @@ import {
   heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
 
-import fontPresets from '../theme/fontPresets';
-
-import elementsPalette from '../data/elementsPalette';
-
 import AppText from './AppText';
-import { FlatList } from 'react-native-gesture-handler';
 import PokemonTypeBubble from './PokemonTypeBubble';
 
 interface Props {
@@ -61,7 +60,7 @@ const PokemonCard = ({ pokemon }: Props) => {
       <FlatList
         horizontal
         data={pokemon.types}
-        renderItem={({ item }) => <PokemonTypeBubble type={item} />}
+        renderItem={({ item, index }) => <PokemonTypeBubble type={item} index={index}/>}
         contentContainerStyle={styles.listOfTypes}
       />
     </TouchableOpacity>
@@ -99,12 +98,12 @@ const styles = StyleSheet.create({
     top: hp(-2)
   },
   gridPoints: {
-    height: hp(4),
-    width: hp(12),
+    height: hp(3.5),
+    width: hp(10),
     resizeMode: 'stretch',
     position: 'absolute',
-    top: hp(1),
-    left: wp(16)
+    top: hp(0.8),
+    left: wp(14)
   },
   pokeballContainer: {
     position: 'absolute',
@@ -128,9 +127,8 @@ const styles = StyleSheet.create({
     fontSize: fontPresets.sizes.tertiarySize
   },
   listOfTypes: {
-    marginTop: wp(1.5)
+    marginTop: hp(0.5)
   }
-
 });
 
-export default PokemonCard;
+export default React.memo(PokemonCard);
