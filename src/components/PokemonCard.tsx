@@ -14,6 +14,12 @@ import {
   heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
 
+import { StackNavigationProp } from '@react-navigation/stack';
+
+import { RootStackParams } from '../navigators/StackNavigator';
+
+import { useNavigation } from '@react-navigation/native'
+
 import AppText from './AppText';
 import PokemonTypeBubble from './PokemonTypeBubble';
 
@@ -21,14 +27,19 @@ interface Props {
   pokemon: SinglePokemonResponse
 };
 
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParams, 'HomeScreen'>
+
 const PokemonCard = ({ pokemon }: Props) => {
 
   const uri = pokemon.sprites.other!['official-artwork'].front_default;
 
   const pokeballUri = require('../../assets/images/pokeball.png');
 
+  const { navigate } = useNavigation<HomeScreenNavigationProp>();
+
   return (
     <TouchableOpacity
+      onPress={() => navigate('DetailsScreen', pokemon)}
       activeOpacity={0.8}
       style={{
         ...styles.container,
