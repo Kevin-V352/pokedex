@@ -1,10 +1,10 @@
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const fontPresets = {
   sizes: {
-    primarySize: wp(7),
-    secondarySize: wp(5),
-    tertiarySize: wp(4)
+    primarySize: hp(4),
+    secondarySize: hp(3),
+    tertiarySize: hp(2)
   },
   weights: {
     bold: 'Quicksand-Bold',
