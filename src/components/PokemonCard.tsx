@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Image, View, FlatList } from 'react-native';
+import { TouchableOpacity, StyleSheet, Image, FlatList, View } from 'react-native';
 
 import { SinglePokemonResponse } from '../interfaces/pokemonsInterfaces';
 
@@ -22,6 +22,7 @@ import { useNavigation } from '@react-navigation/native'
 
 import AppText from './AppText';
 import PokemonTypeBubble from './PokemonTypeBubble';
+import CustomIcon from './CustomIcon';
 
 interface Props {
   pokemon: SinglePokemonResponse
@@ -33,7 +34,7 @@ const PokemonCard = ({ pokemon }: Props) => {
 
   const uri = pokemon.sprites.other!['official-artwork'].front_default;
 
-  const pokeballUri = require('../../assets/images/pokeball.png');
+  const typeColor: string = elementsPalette[pokemon.types[0].type.name];
 
   const { navigate } = useNavigation<HomeScreenNavigationProp>();
 
@@ -43,7 +44,7 @@ const PokemonCard = ({ pokemon }: Props) => {
       activeOpacity={0.8}
       style={{
         ...styles.container,
-        backgroundColor: elementsPalette[pokemon.types[0].type.name]
+        backgroundColor: typeColor
       }}
     >
       <AppText
@@ -58,20 +59,24 @@ const PokemonCard = ({ pokemon }: Props) => {
         source={{ uri }}
         style={styles.avatar}
       />
-      <Image
-        source={require('../../assets/images/grid-points.png')}
+      <CustomIcon
+        name='grid-6x3'
+        size={hp(5)}
+        color='white'
         style={styles.gridPoints}
       />
       <View style={styles.pokeballContainer}>
-        <Image
-          source={pokeballUri}
+        <CustomIcon
+          name='pokeball'
+          size={hp(20)}
+          color='white'
           style={styles.pokeball}
         />
       </View>
       <FlatList
         horizontal
         data={pokemon.types}
-        renderItem={({ item, index }) => <PokemonTypeBubble type={item} index={index}/>}
+        renderItem={({ item, index }) => <PokemonTypeBubble type={item} index={index} />}
         contentContainerStyle={styles.listOfTypes}
       />
     </TouchableOpacity>
@@ -93,7 +98,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.36,
     shadowRadius: 6.68,
-    elevation: 4
+    elevation: 4,
   },
   avatar: {
     width: wp(30),
@@ -104,17 +109,10 @@ const styles = StyleSheet.create({
     zIndex: 1
   },
   pokeball: {
-    height: hp(20),
-    width: hp(20),
-    top: hp(-2)
-  },
-  gridPoints: {
-    height: hp(3.5),
-    width: hp(10),
-    resizeMode: 'stretch',
+    opacity: 0.3,
     position: 'absolute',
-    top: hp(0.8),
-    left: wp(14)
+    top: hp(-2),
+    zIndex: -1
   },
   pokeballContainer: {
     position: 'absolute',
@@ -125,6 +123,12 @@ const styles = StyleSheet.create({
     borderTopRightRadius: wp(4),
     borderBottomRightRadius: wp(4),
     overflow: 'hidden'
+  },
+  gridPoints: {
+    position: 'absolute',
+    top: hp(-1.5),
+    left: wp(28),
+    opacity: 0.3
   },
   name: {
     color: 'white',

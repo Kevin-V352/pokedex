@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   container: {  
     marginRight: wp(1),
     paddingHorizontal: wp(2),
-    borderRadius: wp(3),
+    borderRadius: wp(2),
     maxHeight: hp(4),
     justifyContent: 'center',
     alignItems: 'center',
