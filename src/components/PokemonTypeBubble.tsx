@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Type } from '../interfaces/pokemonsInterfaces';
@@ -8,6 +8,9 @@ import fontPresets from '../theme/fontPresets';
 import elementsPalette from '../data/elementsPalette';
 
 import { formatName } from '../helpers/textFormatters';
+import { colorSelector } from '../helpers/themeSelectors';
+
+import { ThemeContext } from '../contexts/themeContext/ThemeContext';
 
 import {
   widthPercentageToDP as wp,
@@ -23,6 +26,9 @@ interface Props {
 };
 
 const PokemonTypeBubble = ({ type, index }: Props) => {
+
+  const { currentTheme } = useContext(ThemeContext);
+
   return (
     <View style={{
       ...styles.container,
@@ -31,11 +37,14 @@ const PokemonTypeBubble = ({ type, index }: Props) => {
       <CustomIcon 
         name={type.type.name} 
         size={fontPresets.sizes.tertiarySize} 
-        color='white'
+        color={colorSelector(currentTheme)}
       />
       <AppText
         text={formatName(type.type.name)}
-        customStyles={styles.text}
+        customStyles={{
+          ...styles.text,
+          color: colorSelector(currentTheme)
+        }}
       />
     </View>
   );
@@ -54,7 +63,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: fontPresets.sizes.tertiarySize,
+    fontSize: fontPresets.sizes.quaternarySize,
     marginTop: hp(-0.5),
     marginLeft: wp(1)
   }

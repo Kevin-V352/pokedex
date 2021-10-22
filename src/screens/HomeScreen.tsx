@@ -1,17 +1,25 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet, Image, FlatList } from 'react-native';
 
 import {widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import PokemonCard from '../components/PokemonCard';
 
 import usePokemonPaginated from '../hooks/usePokemonPaginated';
 
+import { ThemeContext } from '../contexts/themeContext/ThemeContext';
+
+import PokemonCard from '../components/PokemonCard';
+
 const HomeScreen = () => {
 
-  const { pokemonList, loadPokemons } = usePokemonPaginated()
+  const { currentTheme } = useContext(ThemeContext);
+
+  const { pokemonList, loadPokemons } = usePokemonPaginated();
   
   return (
-    <View style={styles.container}>
+    <View style={{
+      ...styles.container,
+      backgroundColor: currentTheme.tertiaryColor
+    }}>
       <Image
         source={require('../../assets/images/half-pokeball.png')}
         style={styles.topLogo}
@@ -19,6 +27,7 @@ const HomeScreen = () => {
       <FlatList
         data={pokemonList}
         renderItem={({ item }) => <PokemonCard pokemon={item}/>}
+        keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{
           alignItems: 'center',
           width: wp(100),
@@ -34,8 +43,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    backgroundColor: 'white'
+    alignItems: 'center'
   },
   topLogo: {
     resizeMode: 'stretch',

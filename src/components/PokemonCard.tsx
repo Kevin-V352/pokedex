@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { TouchableOpacity, StyleSheet, Image, FlatList, View } from 'react-native';
 
 import { SinglePokemonResponse } from '../interfaces/pokemonsInterfaces';
@@ -8,6 +8,7 @@ import fontPresets from '../theme/fontPresets';
 import elementsPalette from '../data/elementsPalette';
 
 import { formatIndexNumber, formatName } from '../helpers/textFormatters';
+import { colorSelector } from '../helpers/themeSelectors';
 
 import {
   widthPercentageToDP as wp,
@@ -20,9 +21,12 @@ import { RootStackParams } from '../navigators/StackNavigator';
 
 import { useNavigation } from '@react-navigation/native'
 
+import CustomIcon from './CustomIcon';
+
+import { ThemeContext } from '../contexts/themeContext/ThemeContext';
+
 import AppText from './AppText';
 import PokemonTypeBubble from './PokemonTypeBubble';
-import CustomIcon from './CustomIcon';
 
 interface Props {
   pokemon: SinglePokemonResponse
@@ -35,6 +39,8 @@ const PokemonCard = ({ pokemon }: Props) => {
   const uri = pokemon.sprites.other!['official-artwork'].front_default;
 
   const typeColor: string = elementsPalette[pokemon.types[0].type.name];
+
+  const { currentTheme } = useContext(ThemeContext);
 
   const { navigate } = useNavigation<HomeScreenNavigationProp>();
 
@@ -49,11 +55,17 @@ const PokemonCard = ({ pokemon }: Props) => {
     >
       <AppText
         text={formatIndexNumber(pokemon.id)}
-        customStyles={styles.id}
+        customStyles={{
+          ...styles.id,
+          color: currentTheme.primaryColor
+        }}
       />
       <AppText
         text={formatName(pokemon.name)}
-        customStyles={styles.name}
+        customStyles={{
+          ...styles.name,
+          color: colorSelector(currentTheme)
+        }}
       />
       <Image
         source={{ uri }}
@@ -62,14 +74,14 @@ const PokemonCard = ({ pokemon }: Props) => {
       <CustomIcon
         name='grid-6x3'
         size={hp(5)}
-        color='white'
+        color={colorSelector(currentTheme)} 
         style={styles.gridPoints}
       />
       <View style={styles.pokeballContainer}>
         <CustomIcon
           name='pokeball'
           size={hp(20)}
-          color='white'
+          color={colorSelector(currentTheme)}
           style={styles.pokeball}
         />
       </View>
@@ -131,15 +143,13 @@ const styles = StyleSheet.create({
     opacity: 0.3
   },
   name: {
-    color: 'white',
     fontFamily: fontPresets.weights.bold,
     fontSize: fontPresets.sizes.primarySize,
     marginTop: hp(-1)
   },
   id: {
-    color: '#1C1C1C',
     fontFamily: fontPresets.weights.bold,
-    fontSize: fontPresets.sizes.tertiarySize
+    fontSize: fontPresets.sizes.quaternarySize
   },
   listOfTypes: {
     marginTop: hp(0.5)
