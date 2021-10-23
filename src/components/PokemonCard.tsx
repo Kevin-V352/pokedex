@@ -1,41 +1,31 @@
 import React, { useContext } from 'react';
 import { TouchableOpacity, StyleSheet, Image, FlatList, View } from 'react-native';
 
-import { SinglePokemonResponse } from '../interfaces/pokemonsInterfaces';
-
-import fontPresets from '../theme/fontPresets';
-
-import elementsPalette from '../data/elementsPalette';
-
-import { formatIndexNumber, formatName } from '../helpers/textFormatters';
-import { colorSelector } from '../helpers/themeSelectors';
-
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
 
-import { StackNavigationProp } from '@react-navigation/stack';
-
-import { RootStackParams } from '../navigators/StackNavigator';
-
-import { useNavigation } from '@react-navigation/native'
-
-import CustomIcon from './CustomIcon';
-
 import { ThemeContext } from '../contexts/themeContext/ThemeContext';
-
+import elementsPalette from '../data/elementsPalette';
+import { formatIndexNumber, formatName } from '../helpers/textFormatters';
+import { colorSelector } from '../helpers/themeSelectors';
+import { SinglePokemonResponse } from '../interfaces/pokemonsInterfaces';
+import { RootStackParams } from '../navigators/StackNavigator';
+import fontPresets from '../theme/fontPresets';
 import AppText from './AppText';
+import CustomIcon from './CustomIcon';
 import PokemonTypeBubble from './PokemonTypeBubble';
 
 interface Props {
   pokemon: SinglePokemonResponse
 };
 
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParams, 'HomeScreen'>
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParams, 'HomeScreen'>;
 
 const PokemonCard = ({ pokemon }: Props) => {
-
   const uri = pokemon.sprites.other!['official-artwork'].front_default;
 
   const typeColor: string = elementsPalette[pokemon.types[0].type.name];
@@ -72,14 +62,14 @@ const PokemonCard = ({ pokemon }: Props) => {
         style={styles.avatar}
       />
       <CustomIcon
-        name='grid-6x3'
+        name="grid-6x3"
         size={hp(5)}
-        color={colorSelector(currentTheme)} 
+        color={colorSelector(currentTheme)}
         style={styles.gridPoints}
       />
       <View style={styles.pokeballContainer}>
         <CustomIcon
-          name='pokeball'
+          name="pokeball"
           size={hp(20)}
           color={colorSelector(currentTheme)}
           style={styles.pokeball}
@@ -106,11 +96,11 @@ const styles = StyleSheet.create({
     shadowColor: '#1C1C1C',
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 5
     },
     shadowOpacity: 0.36,
     shadowRadius: 6.68,
-    elevation: 4,
+    elevation: 4
   },
   avatar: {
     width: wp(30),
@@ -151,9 +141,7 @@ const styles = StyleSheet.create({
     fontFamily: fontPresets.weights.bold,
     fontSize: fontPresets.sizes.quaternarySize
   },
-  listOfTypes: {
-    marginTop: hp(0.5)
-  }
+  listOfTypes: { marginTop: hp(0.5) }
 });
 
 export default React.memo(PokemonCard);

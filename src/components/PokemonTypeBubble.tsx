@@ -1,22 +1,17 @@
 import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { Type } from '../interfaces/pokemonsInterfaces';
-
-import fontPresets from '../theme/fontPresets';
-
-import elementsPalette from '../data/elementsPalette';
-
-import { formatName } from '../helpers/textFormatters';
-import { colorSelector } from '../helpers/themeSelectors';
-
-import { ThemeContext } from '../contexts/themeContext/ThemeContext';
-
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
 
+import { ThemeContext } from '../contexts/themeContext/ThemeContext';
+import elementsPalette from '../data/elementsPalette';
+import { formatName } from '../helpers/textFormatters';
+import { colorSelector } from '../helpers/themeSelectors';
+import { Type } from '../interfaces/pokemonsInterfaces';
+import fontPresets from '../theme/fontPresets';
 import AppText from './AppText';
 import CustomIcon from './CustomIcon';
 
@@ -26,17 +21,17 @@ interface Props {
 };
 
 const PokemonTypeBubble = ({ type, index }: Props) => {
-
   const { currentTheme } = useContext(ThemeContext);
 
   return (
     <View style={{
       ...styles.container,
       backgroundColor: (index === 0) ? 'rgba(0, 0, 0, 0.1)' : elementsPalette[type.type.name]
-    }}>
-      <CustomIcon 
-        name={type.type.name} 
-        size={fontPresets.sizes.tertiarySize} 
+    }}
+    >
+      <CustomIcon
+        name={type.type.name}
+        size={fontPresets.sizes.tertiarySize}
         color={colorSelector(currentTheme)}
       />
       <AppText
@@ -51,7 +46,7 @@ const PokemonTypeBubble = ({ type, index }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {  
+  container: {
     marginRight: wp(1),
     paddingHorizontal: wp(2),
     borderRadius: wp(2),

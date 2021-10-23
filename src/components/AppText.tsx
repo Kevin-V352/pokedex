@@ -9,15 +9,15 @@ interface Props {
 };
 
 const AppText = ({ text, customStyles }: Props) => (
-  <Text 
+  <Text
     style={{
       fontFamily: fontPresets.weights.semiBold,
       fontSize: fontPresets.sizes.secondarySize,
-      ...customStyles as any,
+      ...customStyles as any
     }}
   >
     {text}
-  </Text> 
+  </Text>
 );
 
 export default AppText;

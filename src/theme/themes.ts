@@ -12,7 +12,7 @@ const themes = {
     secondaryColor: 'rgba(255, 255, 255, 0.5)',
     tertiaryColor: '#1C1C1C',
     typeColor: '#1C1C1C'
-  }  
+  }
 };
 
 export default themes;

@@ -1,3 +1,5 @@
 import axios from 'axios';
 
-export const pokemonApi = axios.create();
+const pokemonApi = axios.create();
+
+export default pokemonApi;

@@ -1,17 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { pokemonApi } from '../api/pokemonAPI';
-
+import pokemonApi from '../api/pokemonAPI';
 import { PokemonPaginatedResponse, SinglePokemonResponse } from '../interfaces/pokemonsInterfaces';
 
 const usePokemonPaginated = () => {
-
   const nextPageUrl = useRef<string>('https://pokeapi.co/api/v2/pokemon?limit=20');
 
   const [pokemonList, setPokemonList] = useState<SinglePokemonResponse[]>([]);
 
   const loadPokemons = async () => {
-  
     const resp = await pokemonApi.get<PokemonPaginatedResponse>(nextPageUrl.current);
     nextPageUrl.current = resp.data.next;
 
@@ -26,7 +23,7 @@ const usePokemonPaginated = () => {
 
   useEffect(() => {
     loadPokemons();
-  }, [])
+  }, []);
 
   return {
     pokemonList,
@@ -34,6 +31,4 @@ const usePokemonPaginated = () => {
   };
 };
 
-
 export default usePokemonPaginated;
-
