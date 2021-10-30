@@ -12,7 +12,7 @@ export interface Result {
   url: string;
 }
 
-export interface SinglePokemonResponse {
+export interface PokemonResponse {
   abilities: Ability[];
   base_experience: number;
   forms: Species[];

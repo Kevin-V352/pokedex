@@ -3,5 +3,4 @@ export interface Theme {
   primaryColor: string;
   secondaryColor: string;
   tertiaryColor: string;
-  typeColor: string;
 };
