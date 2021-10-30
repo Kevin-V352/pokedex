@@ -20,22 +20,22 @@ interface Props {
   index: number;
 };
 
-const PokemonTypeBubble = ({ type, index }: Props) => {
+const PokemonTypeBubble = ({ type: { type: { name } }, index }: Props) => {
   const { currentTheme } = useContext(ThemeContext);
 
   return (
     <View style={{
       ...styles.container,
-      backgroundColor: (index === 0) ? 'rgba(0, 0, 0, 0.1)' : elementsPalette[type.type.name]
+      backgroundColor: (index === 0) ? 'rgba(0, 0, 0, 0.1)' : elementsPalette[name]
     }}
     >
       <CustomIcon
-        name={type.type.name}
+        name={name}
         size={fontPresets.sizes.tertiarySize}
         color={colorSelector(currentTheme)}
       />
       <AppText
-        text={formatName(type.type.name)}
+        text={formatName(name)}
         customStyles={{
           ...styles.text,
           color: colorSelector(currentTheme)
@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   text: {
-    color: 'white',
     fontSize: fontPresets.sizes.quaternarySize,
     marginTop: hp(-0.5),
     marginLeft: wp(1)
