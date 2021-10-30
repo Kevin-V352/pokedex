@@ -1,19 +1,20 @@
 /* eslint-disable react/no-children-prop */
 
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
+import { ThemeContext } from '../contexts/themeContext/ThemeContext';
 import elementsPalette from '../data/elementsPalette';
 import { calculateWidth } from '../helpers/dimensionFormatters';
-import { SinglePokemonResponse } from '../interfaces/pokemonsInterfaces';
+import { PokemonResponse } from '../interfaces/pokemonsInterfaces';
 import AboutScreen from '../screens/AboutScreen';
 import EvolutionScreen from '../screens/EvolutionScreen';
 import StatsScreen from '../screens/StatsScreen';
 import fontPresets from '../theme/fontPresets';
 
 interface Props {
-  pokemon: SinglePokemonResponse;
+  pokemon: PokemonResponse;
 };
 
 const Tab = createMaterialTopTabNavigator();
@@ -21,18 +22,24 @@ const Tab = createMaterialTopTabNavigator();
 const MaterialTopTabNavigator = ({ pokemon }: Props) => {
   const typeColor: string = elementsPalette[pokemon.types[0].type.name];
 
+  const { currentTheme } = useContext(ThemeContext);
+
   return (
     <Tab.Navigator
+      backBehavior="none"
       sceneContainerStyle={{ backgroundColor: 'white' }}
       screenOptions={{
+        lazy: true,
+
         tabBarLabelStyle: {
           textTransform: 'none',
           fontFamily: fontPresets.weights.semiBold,
           fontSize: fontPresets.sizes.secondarySize
         },
+        /* tabBarItemStyle: { backgroundColor: 'red', alignSelf: 'flex-end' }, */
         tabBarStyle: {
           // Remove shaded border in IOS
-          shadowColor: 'transparent',
+          shadowColor: currentTheme.secondaryColor,
           // Remove shaded border in Android
           elevation: 0
         },
@@ -41,17 +48,17 @@ const MaterialTopTabNavigator = ({ pokemon }: Props) => {
     >
       <Tab.Screen
         name="About"
-        component={AboutScreen}
+        children={() => <AboutScreen pokemon={pokemon} />}
         options={{ tabBarIndicatorStyle: calculateWidth('Stats', typeColor) }}
       />
       <Tab.Screen
         name="Stats"
-        children={() => <StatsScreen stats={pokemon.stats} />}
+        children={() => <StatsScreen pokemon={pokemon} />}
         options={{ tabBarIndicatorStyle: calculateWidth('Stats', typeColor) }}
       />
       <Tab.Screen
         name="Evolution"
-        component={EvolutionScreen}
+        children={() => <EvolutionScreen pokemon={pokemon} />}
         options={{ tabBarIndicatorStyle: calculateWidth('Evolution', typeColor) }}
       />
     </Tab.Navigator>
