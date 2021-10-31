@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, View, StyleProp, ViewStyle } from 'react-native';
 
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -7,13 +7,21 @@ import { ThemeContext } from '../contexts/themeContext/ThemeContext';
 import useInfiniteRotationAnimation from '../hooks/useInfiniteRotationAnimation';
 import CustomIcon from './CustomIcon';
 
-const Loader = () => {
+interface Props {
+  customStyles?: StyleProp<ViewStyle>;
+};
+
+const Loader = ({ customStyles }: Props) => {
   const { currentTheme: { secondaryColor } } = useContext(ThemeContext);
 
   const { spin } = useInfiniteRotationAnimation();
 
   return (
-    <View style={styles.container}>
+    <View style={{
+      ...styles.container,
+      ...customStyles as any
+    }}
+    >
       <Animated.View
         style={{
           transform: [{ rotate: spin }],
@@ -21,7 +29,11 @@ const Loader = () => {
           opacity: 0.2
         }}
       >
-        <CustomIcon name="pokeball" size={hp(10)} color={secondaryColor} />
+        <CustomIcon
+          name="pokeball"
+          size={hp(10)}
+          color={secondaryColor}
+        />
       </Animated.View>
     </View>
   );
@@ -35,4 +47,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Loader;
+export default React.memo(Loader);
