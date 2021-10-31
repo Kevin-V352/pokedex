@@ -4,7 +4,7 @@ import pokemonApi from '../api/pokemonAPI';
 import { PokemonPaginatedResponse, PokemonResponse } from '../interfaces/pokemonsInterfaces';
 
 const usePokemonPaginated = () => {
-  const nextPageUrl = useRef<string>('https://pokeapi.co/api/v2/pokemon?limit=20');
+  const nextPageUrl = useRef<string>('https://pokeapi.co/api/v2/pokemon?limit=15');
 
   const [pokemonList, setPokemonList] = useState<PokemonResponse[]>([]);
 
