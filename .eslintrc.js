@@ -28,6 +28,7 @@ module.exports = {
     'no-use-before-define': RULES.OFF,
     'react/require-default-props': RULES.OFF,
     'comma-dangle': [RULES.ERROR, 'never'],
+    'max-len': [RULES.ERROR, { code: 115 }],
     'object-curly-newline': [RULES.ERROR, { multiline: true }],
     '@typescript-eslint/no-unused-vars': [RULES.ERROR, { argsIgnorePattern: '^_' }],
     'import/extensions': [RULES.ERROR,
