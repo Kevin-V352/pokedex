@@ -12,7 +12,7 @@ import { ThemeContext } from '../contexts/themeContext/ThemeContext';
 import elementsPalette from '../data/elementsPalette';
 import { formatIndexNumber, formatName } from '../helpers/textFormatters';
 import { colorSelector } from '../helpers/themeSelectors';
-import { SinglePokemonResponse } from '../interfaces/pokemonsInterfaces';
+import { PokemonResponse } from '../interfaces/pokemonsInterfaces';
 import { RootStackParams } from '../navigators/StackNavigator';
 import fontPresets from '../theme/fontPresets';
 import AppText from './AppText';
@@ -20,7 +20,7 @@ import CustomIcon from './CustomIcon';
 import PokemonTypeBubble from './PokemonTypeBubble';
 
 interface Props {
-  pokemon: SinglePokemonResponse
+  pokemon: PokemonResponse
 };
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParams, 'HomeScreen'>;
