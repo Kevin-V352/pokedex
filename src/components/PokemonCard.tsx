@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { TouchableOpacity, StyleSheet, Image, FlatList, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, FlatList, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -17,6 +17,7 @@ import { RootStackParams } from '../navigators/StackNavigator';
 import fontPresets from '../theme/fontPresets';
 import AppText from './AppText';
 import CustomIcon from './CustomIcon';
+import FadeImage from './FadeImage';
 import PokemonTypeBubble from './PokemonTypeBubble';
 
 interface Props {
@@ -24,6 +25,10 @@ interface Props {
 };
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParams, 'HomeScreen'>;
+
+const areEqual = (prevProps: Readonly<Props>, nextProps: Readonly<Props>) => (
+  prevProps.pokemon.id === nextProps.pokemon.id
+);
 
 const PokemonCard = ({ pokemon }: Props) => {
   const uri = pokemon.sprites.other!['official-artwork'].front_default;
@@ -57,16 +62,20 @@ const PokemonCard = ({ pokemon }: Props) => {
           color: colorSelector(currentTheme)
         }}
       />
-      <Image
-        source={{ uri }}
-        style={styles.avatar}
+      <FadeImage
+        uri={uri}
+        customImageStyles={styles.avatar}
+        customContainerStyles={styles.avatarContainer}
       />
-      <CustomIcon
-        name="grid-6x3"
-        size={hp(5)}
-        color={colorSelector(currentTheme)}
-        style={styles.gridPoints}
-      />
+      <View style={styles.gridPointsContainer}>
+        <CustomIcon
+          name="grid-6x3"
+          size={hp(5)}
+          color={colorSelector(currentTheme)}
+          style={styles.gridPoints}
+        />
+      </View>
+
       <View style={styles.pokeballContainer}>
         <CustomIcon
           name="pokeball"
@@ -104,7 +113,9 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: wp(30),
-    height: wp(30),
+    height: wp(30)
+  },
+  avatarContainer: {
     position: 'absolute',
     top: hp(-3),
     right: wp(2),
@@ -126,11 +137,14 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: wp(4),
     overflow: 'hidden'
   },
-  gridPoints: {
+  gridPointsContainer: {
     position: 'absolute',
-    top: hp(-1.5),
-    left: wp(28),
-    opacity: 0.3
+    overflow: 'hidden',
+    left: wp(28)
+  },
+  gridPoints: {
+    opacity: 0.3,
+    top: hp(-1.5)
   },
   name: {
     fontFamily: fontPresets.weights.bold,
@@ -144,4 +158,4 @@ const styles = StyleSheet.create({
   listOfTypes: { marginTop: hp(0.5) }
 });
 
-export default React.memo(PokemonCard);
+export default React.memo(PokemonCard, areEqual);
