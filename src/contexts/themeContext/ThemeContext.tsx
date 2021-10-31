@@ -2,7 +2,8 @@ import React, { createContext, FC, useState } from 'react';
 
 import { Theme } from '../../interfaces/themeInterfaces';
 import themes from '../../theme/themes';
-import { ThemeOptions } from '../../types/themeTypes';
+
+export type ThemeOptions = 'light' | 'dark';
 
 interface ThemeContextProps {
   currentTheme: Theme;
