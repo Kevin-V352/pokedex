@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, FlatList, Image, TouchableOpacity, StatusBar } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
 
 import { StackScreenProps } from '@react-navigation/stack';
+import FastImage from 'react-native-fast-image';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
@@ -11,7 +12,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import AppText from '../components/AppText';
 import CustomIcon from '../components/CustomIcon';
-import PokemonTypeBubble from '../components/PokemonTypeBubble';
+import ListTypesOfElements from '../components/ListTypesOfElements';
 import { ThemeContext } from '../contexts/themeContext/ThemeContext';
 import elementsPalette from '../data/elementsPalette';
 import { formatName, formatIndexNumber } from '../helpers/textFormatters';
@@ -22,7 +23,7 @@ import fontPresets from '../theme/fontPresets';
 
 interface Props extends StackScreenProps<RootStackParams, 'DetailsScreen'> { };
 
-const DetailsScreen = ({ navigation, route: { params } }: Props) => {
+const DetailsScreen = ({ navigation: { navigate }, route: { params } }: Props) => {
   const typeColor: string = elementsPalette[params.types[0].type.name];
 
   const uri = params.sprites.other!['official-artwork'].front_default;
@@ -42,9 +43,10 @@ const DetailsScreen = ({ navigation, route: { params } }: Props) => {
       <StatusBar
         animated
         backgroundColor={typeColor}
+        barStyle="light-content"
       />
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigate('HomeScreen')}>
           <Icon name="arrow-back" size={wp(9)} color="white" />
         </TouchableOpacity>
         <View style={styles.row}>
@@ -63,18 +65,12 @@ const DetailsScreen = ({ navigation, route: { params } }: Props) => {
             }}
           />
         </View>
-        <FlatList
-          horizontal
-          data={params.types}
-          renderItem={({ item, index }) => (
-            <PokemonTypeBubble
-              type={item}
-              index={index}
-            />
-          )}
-        />
-        <Image
-          source={{ uri }}
+        <ListTypesOfElements types={params.types} />
+        <FastImage
+          source={{
+            uri,
+            priority: 'high'
+          }}
           style={styles.pokemonFrontSprite}
         />
         <CustomIcon
@@ -89,7 +85,11 @@ const DetailsScreen = ({ navigation, route: { params } }: Props) => {
           color={colorSelector(currentTheme)}
           style={styles.gridPointsIcons}
         />
-        <View style={styles.roundedTopEdge} />
+        <View style={{
+          ...styles.roundedTopEdge,
+          backgroundColor: currentTheme.tertiaryColor
+        }}
+        />
       </View>
       <MaterialTopTabNavigator pokemon={params} />
     </View>
