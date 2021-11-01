@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -9,6 +9,7 @@ import { MinimumDataEvolution } from '../interfaces/evolutionInterfaces';
 import fontPresets from '../theme/fontPresets';
 import AppText from './AppText';
 import CustomIcon from './CustomIcon';
+import FadeImage from './FadeImage';
 
 interface Props {
   minimumData: MinimumDataEvolution;
@@ -25,9 +26,9 @@ const EvolutionCard = ({ minimumData: { img, id, name } }: Props) => {
         color={secondaryColor}
         style={styles.pokeballIcon}
       />
-      <Image
-        source={{ uri: img }}
-        style={styles.img}
+      <FadeImage
+        uri={img}
+        customImageStyles={styles.img}
       />
       <AppText
         text={formatIndexNumber(id)}
