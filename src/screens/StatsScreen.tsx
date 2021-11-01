@@ -17,7 +17,6 @@ import { formatName } from '../helpers/textFormatters';
 import useStatsData from '../hooks/useStatsData';
 import { PokemonResponse } from '../interfaces/pokemonsInterfaces';
 import fontPresets from '../theme/fontPresets';
-import globalStyles from '../theme/globalStyles';
 
 interface Props {
   pokemon: PokemonResponse;
@@ -49,7 +48,7 @@ const StatsScreen = ({ pokemon: { name, types, stats } }: Props) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={globalStyles.screenContainer}>
+      <View style={styles.container}>
         <AppText
           text="Base Stats"
           customStyles={{
@@ -100,8 +99,7 @@ const StatsScreen = ({ pokemon: { name, types, stats } }: Props) => {
         <AppText
           text={desc1}
           customStyles={{
-            fontSize: fontPresets.sizes.quaternarySize,
-            textAlign: 'justify',
+            ...styles.desc1,
             color: secondaryColor
           }}
         />
@@ -136,8 +134,13 @@ const StatsScreen = ({ pokemon: { name, types, stats } }: Props) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: wp(5),
+    marginBottom: hp(1)
+  },
   titleSection: {
-    marginVertical: hp(3),
+    marginBottom: hp(3),
+    marginTop: hp(2),
     fontFamily: fontPresets.weights.bold
   },
   rowTypes: {
@@ -155,6 +158,11 @@ const styles = StyleSheet.create({
   statFooter: {
     flexDirection: 'row',
     marginBottom: hp(3)
+  },
+  desc1: {
+    fontSize: fontPresets.sizes.quaternarySize,
+    textAlign: 'justify',
+    marginBottom: hp(1)
   }
 });
 
