@@ -1,7 +1,10 @@
 import React, { useContext } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp
+} from 'react-native-responsive-screen';
 
 import AppText from '../components/AppText';
 import Loader from '../components/Loader';
@@ -11,7 +14,6 @@ import elementsPalette from '../data/elementsPalette';
 import useAboutData from '../hooks/useAboutData';
 import { PokemonResponse } from '../interfaces/pokemonsInterfaces';
 import fontPresets from '../theme/fontPresets';
-import globalStyles from '../theme/globalStyles';
 
 interface Props {
   pokemon: PokemonResponse;
@@ -35,7 +37,7 @@ const AboutScreen = ({ pokemon }: Props) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={globalStyles.screenContainer}>
+      <View style={styles.container}>
         <AppText
           text="Description"
           customStyles={{
@@ -77,8 +79,13 @@ const AboutScreen = ({ pokemon }: Props) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: hp(1),
+    paddingHorizontal: wp(5)
+  },
   titleSection: {
-    marginVertical: hp(3),
+    marginBottom: hp(3),
+    marginTop: hp(2),
     fontFamily: fontPresets.weights.bold
   }
 });
