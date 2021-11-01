@@ -3,7 +3,7 @@ apply plugin: "com.android.application"
 import com.android.build.OutputFile
 
 project.ext.vectoricons = [
-    iconFontNames: [ 'Ionicons.ttf' ]
+    iconFontNames: [ 'Ionicons.ttf', 'MaterialIcons.ttf' ]
 ]
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
