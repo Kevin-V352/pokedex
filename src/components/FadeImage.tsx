@@ -8,7 +8,7 @@ import useFadeAnimation from '../hooks/useFadeAnimation';
 interface Props {
   uri: string;
   customImageStyles: StyleProp<ImageStyle>;
-  customContainerStyles: StyleProp<ViewStyle>;
+  customContainerStyles?: StyleProp<ViewStyle>;
 };
 
 const FadeImage = ({ uri, customImageStyles, customContainerStyles }: Props) => {
