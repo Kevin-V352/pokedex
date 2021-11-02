@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import axios from 'axios';
+
 import pokemonApi from '../api/pokemonAPI';
 import { EvolutionResponse, Chain, Species, EvolutionItem } from '../interfaces/evolutionInterfaces';
 import { PokemonResponse } from '../interfaces/pokemonsInterfaces';
@@ -8,35 +10,48 @@ import { SpecieResponse } from '../interfaces/speciesInterfaces';
 // >>> Hook >>>
 
 const useEvolutionData = (species: Species) => {
+  const source = axios.CancelToken.source();
+  const requestConfig = { cancelToken: source.token };
+
   const [evolutions, setEvolutions] = useState<EvolutionItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const loadData = async () => {
-    const { data: { evolution_chain: { url } } } = await pokemonApi.get<SpecieResponse>(species.url);
+    try {
+      const { data: { evolution_chain: { url } } } = await pokemonApi
+        .get<SpecieResponse>(species.url, requestConfig);
 
-    const { data: { chain } } = await pokemonApi.get<EvolutionResponse>(url);
+      const { data: { chain } } = await pokemonApi
+        .get<EvolutionResponse>(url, requestConfig);
 
-    if (chain.evolves_to.length !== 0) {
-      const evolutionArr = iterateNestedObjects(chain);
+      if (chain.evolves_to.length !== 0) {
+        const evolutionArr = iterateNestedObjects(chain);
 
-      const promisesDetailsPokemon = [...evolutionArr, evolutionArr[evolutionArr.length - 1]]
-        .map(({ prevPokemon, nextPokemon }, index) => {
-          const currentPokemon = (index !== evolutionArr.length - 1) ? prevPokemon : nextPokemon;
-          return pokemonApi.get<PokemonResponse>(`https://pokeapi.co/api/v2/pokemon/${currentPokemon}`);
-        });
+        const promisesDetailsPokemon = [...evolutionArr, evolutionArr[evolutionArr.length - 1]]
+          .map(({ prevPokemon, nextPokemon }, index) => {
+            const currentPokemon = (index !== evolutionArr.length - 1) ? prevPokemon : nextPokemon;
+            return pokemonApi
+              .get<PokemonResponse>(`https://pokeapi.co/api/v2/pokemon/${currentPokemon}`, requestConfig);
+          });
+        const pokemonDetailsResponse = await Promise.all(promisesDetailsPokemon);
+        const pokemonDetails = pokemonDetailsResponse.map((item) => item.data);
 
-      const pokemonDetailsResponse = await Promise.all(promisesDetailsPokemon);
+        setEvolutions(rearrangeData(pokemonDetails, evolutionArr));
+      };
 
-      const pokemonDetails = pokemonDetailsResponse.map((item) => item.data);
-
-      setEvolutions(rearrangeData(pokemonDetails, evolutionArr));
+      setIsLoading(false);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
     };
-
-    setIsLoading(false);
   };
 
   useEffect(() => {
     loadData();
+
+    return () => {
+      source.cancel('Aborting requests for component disassembly');
+    };
   }, []);
 
   return {

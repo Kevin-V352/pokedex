@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
 import { useEffect, useState } from 'react';
 
+import axios from 'axios';
+
 import pokemonApi from '../api/pokemonAPI';
 import { formatName, formatIndexNumber } from '../helpers/textFormatters';
 import { ElementTypeResponse } from '../interfaces/ElementTypesInterface';
@@ -21,6 +23,9 @@ interface AboutState {
 const useAboutData = (pokemon: PokemonResponse) => {
   const { types, species } = pokemon;
 
+  const source = axios.CancelToken.source();
+  const requestConfig = { cancelToken: source.token };
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [aboutData, setAboutData] = useState<AboutState>({
     desc: '',
@@ -31,21 +36,31 @@ const useAboutData = (pokemon: PokemonResponse) => {
   });
 
   const loadData = async () => {
-    const { data: specieResponse } = await pokemonApi.get<SpecieResponse>(species.url);
+    try {
+      const { data: specieResponse } = await pokemonApi
+        .get<SpecieResponse>(species.url, requestConfig);
 
-    const promisesElementTypesDetails = types.map(({ type: { url } }) => (
-      pokemonApi.get<ElementTypeResponse>(url)
-    ));
-    const elementTypesDetailsResponse = await Promise.all(promisesElementTypesDetails);
-    const elementTypesDetails = elementTypesDetailsResponse.map((item) => item.data);
+      const promisesElementTypesDetails = types.map(({ type: { url } }) => (
+        pokemonApi.get<ElementTypeResponse>(url, requestConfig)
+      ));
+      const elementTypesDetailsResponse = await Promise.all(promisesElementTypesDetails);
+      const elementTypesDetails = elementTypesDetailsResponse.map((item) => item.data);
 
-    setAboutData(rearrangeData(specieResponse, elementTypesDetails, pokemon));
+      setAboutData(rearrangeData(specieResponse, elementTypesDetails, pokemon));
 
-    setIsLoading(false);
+      setIsLoading(false);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    };
   };
 
   useEffect(() => {
     loadData();
+
+    return () => {
+      source.cancel('Aborting requests for component disassembly');
+    };
   }, []);
 
   return {

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+import axios from 'axios';
+
 import pokemonApi from '../api/pokemonAPI';
 import elementsPalette from '../data/elementsPalette';
 import { DefenseRatePercentage, ElementTypeResponse } from '../interfaces/ElementTypesInterface';
@@ -9,16 +11,24 @@ import { Type } from '../interfaces/pokemonsInterfaces';
 // >>> Hook >>>
 
 const useStatsData = (currentPokemonTypes: Type[]) => {
+  const source = axios.CancelToken.source();
+  const requestConfig = { cancelToken: source.token };
+
   const [defenseRatePercentages, setDefenseRatePercentages] = useState<DefenseRatePercentage[]>([]);
 
   const getPercentages = async () => {
-    const promisesElementTypesDetails = currentPokemonTypes.map(({ type }) => (
-      pokemonApi.get<ElementTypeResponse>(`https://pokeapi.co/api/v2/type/${type.name}`)
-    ));
-    const elementTypesDetailsResponse = await Promise.all(promisesElementTypesDetails);
-    const elementTypesDetails = elementTypesDetailsResponse.map((item) => item.data);
+    try {
+      const promisesElementTypesDetails = currentPokemonTypes.map(({ type: { url } }) => (
+        pokemonApi.get<ElementTypeResponse>(url, requestConfig)
+      ));
+      const elementTypesDetailsResponse = await Promise.all(promisesElementTypesDetails);
+      const elementTypesDetails = elementTypesDetailsResponse.map((item) => item.data);
 
-    setDefenseRatePercentages(calculateMultipliersByType(elementTypesDetails));
+      setDefenseRatePercentages(calculateMultipliersByType(elementTypesDetails));
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    };
   };
 
   // >>> Auxiliary functions >>>
@@ -126,6 +136,10 @@ const useStatsData = (currentPokemonTypes: Type[]) => {
 
   useEffect(() => {
     getPercentages();
+
+    return () => {
+      source.cancel('Aborting requests for component disassembly');
+    };
   }, []);
 
   return { defenseRatePercentages };
