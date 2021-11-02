@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { TouchableOpacity, StyleSheet, FlatList, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -18,7 +18,7 @@ import fontPresets from '../theme/fontPresets';
 import AppText from './AppText';
 import CustomIcon from './CustomIcon';
 import FadeImage from './FadeImage';
-import PokemonTypeBubble from './PokemonTypeBubble';
+import ListTypesOfElements from './ListTypesOfElements';
 
 interface Props {
   pokemon: PokemonResponse
@@ -84,11 +84,9 @@ const PokemonCard = ({ pokemon }: Props) => {
           style={styles.pokeball}
         />
       </View>
-      <FlatList
-        horizontal
-        data={pokemon.types}
-        renderItem={({ item, index }) => <PokemonTypeBubble type={item} index={index} />}
-        contentContainerStyle={styles.listOfTypes}
+      <ListTypesOfElements
+        types={pokemon.types}
+        customContainerStyles={styles.listOfTypes}
       />
     </TouchableOpacity>
   );
