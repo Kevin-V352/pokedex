@@ -171,3 +171,10 @@ export interface Type {
   slot: number;
   type: Species;
 }
+
+export interface MinimalInformation {
+  name: string;
+  id: number;
+  types: Type[];
+  img: string | undefined;
+}
