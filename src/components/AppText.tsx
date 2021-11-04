@@ -8,6 +8,10 @@ interface Props {
   customStyles?: StyleProp<TextStyle>
 };
 
+const areEqual = (prevProps: Readonly<Props>, nextProps: Readonly<Props>) => (
+  prevProps.text === nextProps.text
+);
+
 const AppText = ({ text, customStyles }: Props) => (
   <Text
     style={{
@@ -20,4 +24,4 @@ const AppText = ({ text, customStyles }: Props) => (
   </Text>
 );
 
-export default AppText;
+export default React.memo(AppText, areEqual);
