@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { TouchableOpacity, StyleSheet, View } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+/* import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack'; */
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
@@ -12,8 +12,9 @@ import { ThemeContext } from '../contexts/themeContext/ThemeContext';
 import elementsPalette from '../data/elementsPalette';
 import { formatIndexNumber, formatName } from '../helpers/textFormatters';
 import { colorSelector } from '../helpers/themeSelectors';
-import { PokemonResponse } from '../interfaces/pokemonsInterfaces';
-import { RootStackParams } from '../navigators/StackNavigator';
+import { Type } from '../interfaces/pokemonsInterfaces';
+/* import { PokemonResponse, Type } from '../interfaces/pokemonsInterfaces';
+import { RootStackParams } from '../navigators/StackNavigator'; */
 import fontPresets from '../theme/fontPresets';
 import AppText from './AppText';
 import CustomIcon from './CustomIcon';
@@ -21,27 +22,32 @@ import FadeImage from './FadeImage';
 import ListTypesOfElements from './ListTypesOfElements';
 
 interface Props {
-  pokemon: PokemonResponse
+  pokemon: {
+    name: string;
+    id: number;
+    types: Type[];
+    img: string;
+  }
 };
 
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParams, 'HomeScreen'>;
+/* type HomeScreenNavigationProp = StackNavigationProp<RootStackParams, 'HomeScreen'>; */
 
 const areEqual = (prevProps: Readonly<Props>, nextProps: Readonly<Props>) => (
   prevProps.pokemon.id === nextProps.pokemon.id
 );
 
 const PokemonCard = ({ pokemon }: Props) => {
-  const uri = pokemon.sprites.other!['official-artwork'].front_default;
+  const uri = pokemon.img;
 
   const typeColor: string = elementsPalette[pokemon.types[0].type.name];
 
   const { currentTheme } = useContext(ThemeContext);
 
-  const { navigate } = useNavigation<HomeScreenNavigationProp>();
+  /* const { navigate } = useNavigation<HomeScreenNavigationProp>(); */
 
   return (
     <TouchableOpacity
-      onPress={() => navigate('DetailsScreen', pokemon)}
+      /* onPress={() => navigate('DetailsScreen', pokemon)} */
       activeOpacity={0.8}
       style={{
         ...styles.container,
