@@ -13,7 +13,7 @@ import StatBar from '../components/StatBar';
 import { ThemeContext } from '../contexts/themeContext/ThemeContext';
 import elementsPalette from '../data/elementsPalette';
 import { calculateMaxAndMinValuesOfStats } from '../helpers/calculators';
-import { formatName } from '../helpers/textFormatters';
+import { formatNamesWithSpacing } from '../helpers/textFormatters';
 import useStatsData from '../hooks/useStatsData';
 import { PokemonResponse } from '../interfaces/pokemonsInterfaces';
 import fontPresets from '../theme/fontPresets';
@@ -36,7 +36,7 @@ const sharedStylesOfValues: StyleProp<TextStyle> = {
 const StatsScreen = ({ pokemon: { name, types, stats } }: Props) => {
   const typeColor: string = elementsPalette[types[0].type.name];
 
-  const desc2: string = `The effectiveness of each type on ${formatName(name)}.`;
+  const desc2: string = `The effectiveness of each type on ${formatNamesWithSpacing(name)}.`;
 
   const { currentTheme: { primaryColor, secondaryColor } } = useContext(ThemeContext);
 
