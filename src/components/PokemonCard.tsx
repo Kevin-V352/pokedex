@@ -1,20 +1,20 @@
 import React, { useContext } from 'react';
 import { TouchableOpacity, StyleSheet, View } from 'react-native';
 
-/* import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack'; */
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import { ThemeContext } from '../contexts/themeContext/ThemeContext';
 import elementsPalette from '../data/elementsPalette';
-import { formatIndexNumber, formatName } from '../helpers/textFormatters';
+import { formatIndexNumber, formatNamesWithSpacing } from '../helpers/textFormatters';
 import { colorSelector } from '../helpers/themeSelectors';
 import { Type } from '../interfaces/pokemonsInterfaces';
-/* import { PokemonResponse, Type } from '../interfaces/pokemonsInterfaces';
-import { RootStackParams } from '../navigators/StackNavigator'; */
+import { RootStackParams } from '../navigators/StackNavigator';
 import fontPresets from '../theme/fontPresets';
 import AppText from './AppText';
 import CustomIcon from './CustomIcon';
@@ -30,24 +30,22 @@ interface Props {
   }
 };
 
-/* type HomeScreenNavigationProp = StackNavigationProp<RootStackParams, 'HomeScreen'>; */
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParams, 'HomeScreen'>;
 
 const areEqual = (prevProps: Readonly<Props>, nextProps: Readonly<Props>) => (
   prevProps.pokemon.id === nextProps.pokemon.id
 );
 
-const PokemonCard = ({ pokemon }: Props) => {
-  const uri = pokemon.img;
-
-  const typeColor: string = elementsPalette[pokemon.types[0].type.name];
+const PokemonCard = ({ pokemon: { name, id, types, img: uri } }: Props) => {
+  const typeColor: string = elementsPalette[types[0].type.name];
 
   const { currentTheme } = useContext(ThemeContext);
 
-  /* const { navigate } = useNavigation<HomeScreenNavigationProp>(); */
+  const { navigate } = useNavigation<HomeScreenNavigationProp>();
 
   return (
     <TouchableOpacity
-      /* onPress={() => navigate('DetailsScreen', pokemon)} */
+      onPress={() => navigate('DetailsScreen', { id })}
       activeOpacity={0.8}
       style={{
         ...styles.container,
@@ -55,24 +53,29 @@ const PokemonCard = ({ pokemon }: Props) => {
       }}
     >
       <AppText
-        text={formatIndexNumber(pokemon.id)}
+        text={formatIndexNumber(id)}
         customStyles={{
           ...styles.id,
           color: currentTheme.primaryColor
         }}
       />
       <AppText
-        text={formatName(pokemon.name)}
+        text={formatNamesWithSpacing(name)}
+        numberOfLines={1}
         customStyles={{
           ...styles.name,
           color: colorSelector(currentTheme)
         }}
       />
-      <FadeImage
-        uri={uri}
-        customImageStyles={styles.avatar}
-        customContainerStyles={styles.avatarContainer}
-      />
+      {
+        uri && (
+          <FadeImage
+            uri={uri}
+            customImageStyles={styles.avatar}
+            customContainerStyles={styles.avatarContainer}
+          />
+        )
+      }
       <View style={styles.gridPointsContainer}>
         <CustomIcon
           name="grid-6x3"
@@ -81,7 +84,6 @@ const PokemonCard = ({ pokemon }: Props) => {
           style={styles.gridPoints}
         />
       </View>
-
       <View style={styles.pokeballContainer}>
         <CustomIcon
           name="pokeball"
@@ -89,9 +91,19 @@ const PokemonCard = ({ pokemon }: Props) => {
           color={colorSelector(currentTheme)}
           style={styles.pokeball}
         />
+        {
+          !uri && (
+            <Icon
+              name="help-circle"
+              size={hp(15)}
+              color={colorSelector(currentTheme)}
+              style={styles.defaultIcon}
+            />
+          )
+        }
       </View>
       <ListTypesOfElements
-        types={pokemon.types}
+        types={types}
         customContainerStyles={styles.listOfTypes}
       />
     </TouchableOpacity>
@@ -131,6 +143,7 @@ const styles = StyleSheet.create({
     top: hp(-2),
     zIndex: -1
   },
+  defaultIcon: { left: wp(5) },
   pokeballContainer: {
     position: 'absolute',
     top: 0,
@@ -153,7 +166,8 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: fontPresets.weights.bold,
     fontSize: fontPresets.sizes.primarySize,
-    marginTop: hp(-1)
+    marginTop: hp(-1),
+    width: wp(50)
   },
   id: {
     fontFamily: fontPresets.weights.bold,
