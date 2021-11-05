@@ -101,7 +101,6 @@ const AboutItem = ({ item: { title, payload, type } }: Props) => {
   );
 
   const renderGenderItem = () => (
-
     typeof payload === 'string'
       ? renderSimpleItem()
       : (
