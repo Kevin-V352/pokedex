@@ -3,6 +3,13 @@ export const formatName = (name: string) => {
   return name.replace(name[0], capitalLetter);
 };
 
+export const formatNamesWithSpacing = (text: string) => (
+  text
+    .split('-')
+    .map((item) => formatName(item))
+    .join(' ')
+);
+
 export const formatIndexNumber = (index: number) => {
   const indexLength: number = index.toString().length;
 
