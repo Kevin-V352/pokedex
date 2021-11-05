@@ -12,13 +12,14 @@ interface Props {
 };
 
 const Loader = ({ customStyles }: Props) => {
-  const { currentTheme: { secondaryColor } } = useContext(ThemeContext);
+  const { currentTheme: { secondaryColor, tertiaryColor } } = useContext(ThemeContext);
 
   const { spin } = useInfiniteRotationAnimation();
 
   return (
     <View style={{
       ...styles.container,
+      backgroundColor: tertiaryColor,
       ...customStyles as any
     }}
     >
