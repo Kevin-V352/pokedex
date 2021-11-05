@@ -14,16 +14,21 @@ interface Props {
   typeColor: string;
 };
 
-const Section = ({ title, data, typeColor }: Props) => (
-  <View style={{ marginBottom: hp(-2) }}>
-    <AppText
-      text={title}
-      customStyles={{
-        ...styles.titleSection,
-        color: typeColor
-      }}
-    />
-    {
+const Section = ({ title, typeColor, data }: Props) => {
+  if (title === 'Location' && data.length < 1) {
+    return <View style={styles.footer} />;
+  };
+
+  return (
+    <View style={{ marginBottom: hp(-2) }}>
+      <AppText
+        text={title}
+        customStyles={{
+          ...styles.titleSection,
+          color: typeColor
+        }}
+      />
+      {
       data.map((item) => (
         <AboutItem
           item={item}
@@ -31,14 +36,16 @@ const Section = ({ title, data, typeColor }: Props) => (
         />
       ))
     }
-  </View>
-);
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   titleSection: {
     marginVertical: hp(3),
     fontFamily: fontPresets.weights.bold
-  }
+  },
+  footer: { marginBottom: hp(1) }
 });
 
 export default Section;
