@@ -2,13 +2,12 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { PokemonResponse } from '../interfaces/pokemonsInterfaces';
 import DetailsScreen from '../screens/DetailsScreen';
 import HomeScreen from '../screens/HomeScreen';
 
 export type RootStackParams = {
   HomeScreen: undefined
-  DetailsScreen: PokemonResponse
+  DetailsScreen: { id: number }
 };
 
 const Stack = createStackNavigator<RootStackParams>();
