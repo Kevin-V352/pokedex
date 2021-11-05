@@ -13,24 +13,29 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import AppText from '../components/AppText';
 import CustomIcon from '../components/CustomIcon';
 import ListTypesOfElements from '../components/ListTypesOfElements';
+import Loader from '../components/Loader';
 import { ThemeContext } from '../contexts/themeContext/ThemeContext';
 import elementsPalette from '../data/elementsPalette';
-import { formatName, formatIndexNumber } from '../helpers/textFormatters';
+import { formatIndexNumber, formatNamesWithSpacing } from '../helpers/textFormatters';
 import { colorSelector } from '../helpers/themeSelectors';
+import usePokemonDetails from '../hooks/usePokemonDetails';
 import MaterialTopTabNavigator from '../navigators/MaterialTopTabNavigator';
 import { RootStackParams } from '../navigators/StackNavigator';
 import fontPresets from '../theme/fontPresets';
 
 interface Props extends StackScreenProps<RootStackParams, 'DetailsScreen'> { };
 
-const DetailsScreen = ({ navigation: { navigate }, route: { params } }: Props) => {
-  const typeColor: string = elementsPalette[params.types[0].type.name];
-
-  const uri = params.sprites.other!['official-artwork'].front_default;
+const DetailsScreen = ({ navigation: { navigate }, route: { params: { id } } }: Props) => {
+  const { pokemonDetails, loadingDetails } = usePokemonDetails(id);
 
   const { currentTheme } = useContext(ThemeContext);
 
   const { top } = useSafeAreaInsets();
+
+  if (loadingDetails) return <Loader />;
+
+  const typeColor: string = elementsPalette[pokemonDetails.types[0].type.name];
+  const uri = pokemonDetails.sprites.other!['official-artwork'].front_default;
 
   return (
     <View style={{
@@ -51,21 +56,22 @@ const DetailsScreen = ({ navigation: { navigate }, route: { params } }: Props) =
         </TouchableOpacity>
         <View style={styles.row}>
           <AppText
-            text={formatName(params.name)}
+            text={formatNamesWithSpacing(pokemonDetails.name)}
+            numberOfLines={1}
             customStyles={{
               ...styles.title,
               color: colorSelector(currentTheme)
             }}
           />
           <AppText
-            text={formatIndexNumber(params.id)}
+            text={formatIndexNumber(pokemonDetails.id)}
             customStyles={{
               ...styles.indexNumber,
               color: colorSelector(currentTheme)
             }}
           />
         </View>
-        <ListTypesOfElements types={params.types} />
+        <ListTypesOfElements types={pokemonDetails.types} />
         <FastImage
           source={{
             uri,
@@ -73,6 +79,16 @@ const DetailsScreen = ({ navigation: { navigate }, route: { params } }: Props) =
           }}
           style={styles.pokemonFrontSprite}
         />
+        {
+          !uri && (
+            <Icon
+              name="help-circle"
+              size={hp(25)}
+              color={colorSelector(currentTheme)}
+              style={styles.defaultIcon}
+            />
+          )
+        }
         <CustomIcon
           name="pokeball"
           size={hp(25)}
@@ -91,7 +107,7 @@ const DetailsScreen = ({ navigation: { navigate }, route: { params } }: Props) =
         }}
         />
       </View>
-      <MaterialTopTabNavigator pokemon={params} />
+      <MaterialTopTabNavigator pokemon={pokemonDetails} />
     </View>
   );
 };
@@ -101,7 +117,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: fontPresets.sizes.primarySize,
     fontFamily: fontPresets.weights.bold,
-    color: 'white'
+    width: wp(68)
   },
   indexNumber: {
     color: 'white',
@@ -144,6 +160,7 @@ const styles = StyleSheet.create({
     bottom: hp(3),
     right: wp(-6)
   },
+  defaultIcon: { alignSelf: 'center' },
   gridPointsIcons: {
     opacity: 0.3,
     position: 'absolute',
