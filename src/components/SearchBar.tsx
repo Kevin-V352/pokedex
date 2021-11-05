@@ -18,7 +18,7 @@ interface Props {
 const SearchBar = ({ onDebounce }: Props) => {
   const [textValue, setTextValue] = useState<string>('');
 
-  const { currentTheme: { name, secondaryColor } } = useContext(ThemeContext);
+  const { currentTheme: { name, primaryColor, secondaryColor } } = useContext(ThemeContext);
 
   const lightThemeEnabled = (name === 'light');
 
@@ -47,7 +47,7 @@ const SearchBar = ({ onDebounce }: Props) => {
         value={textValue}
         style={{
           ...styles.input,
-          color: secondaryColor
+          color: primaryColor
         }}
       />
     </View>
