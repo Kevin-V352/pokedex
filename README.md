@@ -6,7 +6,7 @@ Un buscador de pokemones que utiliza la [PokéAPI](https://pokeapi.co/) para obt
 
 **NOTA:** La app aún se encuentra en desarrollo, con lo cual faltan algunas funcionalidades y pueden existir ciertos bugs. Cuando finalice su desarrollo se actualizara la información de esta página.
 
-![2](https://i.ibb.co/FxfhZ6M/header-screens.png)
+![2](https://i.ibb.co/4Yvk6S9/header-image.png)
 
 ## Video de presentación
 #### **`¡IMPORTANTE!`**
