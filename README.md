@@ -9,9 +9,12 @@ Un buscador de pokemones que utiliza la [PokéAPI](https://pokeapi.co/) para obt
 ![2](https://i.ibb.co/4Yvk6S9/header-image.png)
 
 ## Video de presentación
+
+Presione la siguiente imagen para ver el video.
+
 #### **`¡IMPORTANTE!`**
 Los videos en modo ventana se reproducen en calidad baja (360p), recomiendo ponerlos en pantalla completa para verlos en 720p o bien ajustar la calidad manualmente. 
-[![pokedex-demo-yt](https://i.ibb.co/vxbyN0q/pokedex-video-preview.png)](https://drive.google.com/file/d/1nA2AtV3LSzcH7RouyZo5MpNO267axh4e/view?usp=sharing)
+[![pokedex-demo-yt](https://i.ibb.co/kQnC66r/pokedex-video-preview-resized.png)](https://drive.google.com/file/d/1OizobJ8zZZ3d_S5XIGIUiRxwUzK-yxoy/view?usp=sharing)
 
 ## Tecnologías
 - ![10](https://i.ibb.co/hXmqN5t/typescript.png) TypeScript
